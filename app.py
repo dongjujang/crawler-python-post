@@ -1,4 +1,5 @@
 
+
 #-*- coding: utf-8 -*-   
 import time
 import os
@@ -8,6 +9,7 @@ import pymongo
 
 TORRENT_URLS = os.environ.get('TORRENT_URL', None)
 SLEEP_TIME = os.environ.get('SLEEP_TIME', 60 * 10)
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
 WEBHOOK_URL = os.environ.get('WEBHOOK_URL', None)
 host = 'http://www.torrentbest.net'
 
@@ -19,15 +21,17 @@ keys = ['subject',
 docs = []
 doc = {}
 
-def post_webhook(data):
+def post_webhook(doc, url):
   if not WEBHOOK_URL:
     return
-  split_url = TORRENT_URL.split('torrent_');
-  collection_name = split_url[2]
-  request.post(WEBHOOK_URL + '/' + collection_name, data=data)
+  split_url = url.split('torrent_');
+  collection_name = split_url[1];
+  requests.post(WEBHOOK_URL + '/' + collection_name, data=doc)
 
 def get_torrent(post_url):
-  response = requests.get(post_url)
+  session = requests.Session()
+  headers = { 'User-Agent': USER_AGENT, 'referer': post_url }
+  response = session.get(post_url, headers=headers)
   soup = BeautifulSoup.BeautifulSoup(response.text)
   elements = soup.findAll('td', attrs={'class': 'view_file'})
   for element in elements:
@@ -41,8 +45,10 @@ def get_torrent(post_url):
       print doc
       break
 
-def get_posts(url_with_page):
-  response = requests.get(url_with_page)
+def get_posts(url_with_page, torrent_url):
+  session = requests.Session()
+  headers = { 'User-Agent': USER_AGENT, 'referer': url_with_page }
+  response = session.get(url_with_page, headers=headers)
   soup = BeautifulSoup.BeautifulSoup(response.text)
 
   elements = soup.find('table', attrs={'id': 'board_list'}).findAll('tr', attrs={'class': 'list_row'})
@@ -63,11 +69,10 @@ def get_posts(url_with_page):
 
     get_torrent(host + a_element['href'][2:])
 
-  if docs:
-    post_webhook(docs)
-    del docs[:]
-  else:
-    return
+    if doc:
+      post_webhook(doc, torrent_url)    
+    else:
+      return
 
 def main():
   if TORRENT_URLS == None:
@@ -78,9 +83,9 @@ def main():
       num = 1
       page_num = range(1, num + 1)
       for i in page_num:
-        get_posts(TORRENT_URL + '&page=' + str(num))
+        get_posts(TORRENT_URL + '&page=' + str(num), TORRENT_URL)
         num = num - 1
     time.sleep(SLEEP_TIME)
 
 if __name__ == '__main__':
-  main()
+    main()

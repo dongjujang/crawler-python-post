@@ -5,7 +5,6 @@ import time
 import os
 import requests
 import BeautifulSoup
-import pymongo
 
 TORRENT_URLS = os.environ.get('TORRENT_URL', None)
 SLEEP_TIME = os.environ.get('SLEEP_TIME', 60 * 10)

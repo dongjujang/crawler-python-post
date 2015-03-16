@@ -5,6 +5,7 @@ import time
 import os
 import bottle
 import requests
+import threading
 import BeautifulSoup
 
 TORRENT_URLS = os.environ.get('TORRENT_URL', None)
@@ -96,5 +97,6 @@ if __name__ == '__main__':
   if debug:
     main()
   else:
+    threading.Thread(target=main).start()
     port = os.environ.get('PORT', 8888)
     bottle.run(host='0.0.0.0', port=port)

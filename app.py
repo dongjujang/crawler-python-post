@@ -3,6 +3,7 @@
 #-*- coding: utf-8 -*-   
 import time
 import os
+import bottle
 import requests
 import BeautifulSoup
 
@@ -86,5 +87,14 @@ def main():
         num = num - 1
     time.sleep(SLEEP_TIME)
 
+@bottle.route('/')
+def index():
+    return ''
+    
 if __name__ == '__main__':
+  debug = False
+  if debug:
     main()
+  else:
+    port = os.environ.get('PORT', 8888)
+    bottle.run(host='0.0.0.0', port=port)

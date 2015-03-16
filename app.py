@@ -79,7 +79,7 @@ def main():
     return
   while True:
     for TORRENT_URL in TORRENT_URLS.split(','):
-      num = 1
+      num = 2
       page_num = range(1, num + 1)
       for i in page_num:
         get_posts(TORRENT_URL + '&page=' + str(num), TORRENT_URL)

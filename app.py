@@ -9,7 +9,7 @@ import threading
 import BeautifulSoup
 
 TORRENT_URLS = os.environ.get('TORRENT_URL', None)
-SLEEP_TIME = os.environ.get('SLEEP_TIME', 60 * 10)
+SLEEP_TIME = os.environ.get('SLEEP_TIME', 60 * 60)
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
 WEBHOOK_URL = os.environ.get('WEBHOOK_URL', None)
 host = 'http://www.torrentbest.net'
@@ -81,7 +81,7 @@ def main():
     return
   while True:
     for TORRENT_URL in TORRENT_URLS.split(','):
-      num = 1
+      num = 2
       page_num = range(1, num + 1)
       for i in page_num:
         get_posts(TORRENT_URL + '&page=' + str(num), TORRENT_URL)

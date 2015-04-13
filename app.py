@@ -15,7 +15,6 @@ WEBHOOK_URL = os.environ.get('WEBHOOK_URL', None)
 host = 'http://www.torrentbest.net'
 
 keys = ['subject',
-        'id_num',
         'magnet',
         'size',
         'number']
@@ -40,7 +39,7 @@ def get_torrent(post_url):
       uncut_magnet = element.text
       cut_magnet = uncut_magnet.split(';', 1)
       magnet = cut_magnet[1]
-      doc[keys[2]] = magnet 
+      doc[keys[1]] = magnet 
       docs.append(doc.copy())
 
       print doc
@@ -54,11 +53,9 @@ def get_posts(url_with_page, torrent_url):
 
   elements = soup.find('table', attrs={'id': 'board_list'}).findAll('tr', attrs={'class': 'list_row'})
   for element in elements:
-    data_num = element.find('td', attrs={'class': 'num'}).text
-    doc[keys[4]] = int(data_num)
 
     data_size = element.find('td', attrs={'class': 'hit'}).text
-    doc[keys[3]] = data_size
+    doc[keys[2]] = data_size
 
     a_element = element.find('a')
     subject = a_element.text
@@ -66,7 +63,9 @@ def get_posts(url_with_page, torrent_url):
     
     uncut_id_num = a_element['href'].split('=', 2)
     id_num = uncut_id_num[2]
-    doc[keys[1]] = id_num
+    uncut_data_num = id_num.split('&', 2)
+    data_num = uncut_data_num[0]
+    doc[keys[3]] = int(data_num)
 
     get_torrent(host + a_element['href'][2:])
 

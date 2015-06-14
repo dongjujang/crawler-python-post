@@ -12,7 +12,6 @@ TORRENT_URLS = os.environ.get('TORRENT_URL', None)
 SLEEP_TIME = os.environ.get('SLEEP_TIME', 60 * 60)
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
 WEBHOOK_URL = os.environ.get('WEBHOOK_URL', None)
-host = 'http://www.torrentbest.net'
 
 keys = ['subject',
         'magnet',
@@ -27,7 +26,7 @@ def post_webhook(doc, url):
   split_url = url.split('torrent_');
   collection_name = split_url[1];
   requests.post(WEBHOOK_URL + '/' + collection_name, data=doc)
-
+  
 def get_torrent(post_url):
   session = requests.Session()
   headers = { 'User-Agent': USER_AGENT, 'referer': post_url }
@@ -42,7 +41,7 @@ def get_torrent(post_url):
       doc[keys[1]] = magnet 
       docs.append(doc.copy())
 
-      print doc
+#      print doc
       break
 
 def get_posts(url_with_page, torrent_url):
@@ -66,6 +65,9 @@ def get_posts(url_with_page, torrent_url):
     uncut_data_num = id_num.split('&', 2)
     data_num = uncut_data_num[0]
     doc[keys[3]] = int(data_num)
+
+    uncut_host = torrent_url.split('/bbs/', 1)
+    host = uncut_host[0]
 
     get_torrent(host + a_element['href'][2:])
 

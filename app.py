@@ -41,7 +41,7 @@ def get_torrent(post_url):
       doc[keys[1]] = magnet 
       docs.append(doc.copy())
 
-#      print doc
+      print doc
       break
 
 def get_posts(url_with_page, torrent_url):

@@ -9,7 +9,7 @@ import threading
 import BeautifulSoup
 
 TORRENT_URLS = os.environ.get('TORRENT_URL', None)
-SLEEP_TIME = os.environ.get('SLEEP_TIME', 60 * 60)
+SLEEP_TIME = os.environ.get('SLEEP_TIME', 60 * 15)
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
 WEBHOOK_URL = os.environ.get('WEBHOOK_URL', None)
 
